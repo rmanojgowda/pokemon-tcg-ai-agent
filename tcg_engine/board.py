@@ -25,3 +25,24 @@ class Board:
             return False
         self.active = self.bench.pop(index)
         return True
+    
+    def retreat(self, bench_index):
+        if self.active is None:
+            return False
+        if bench_index < 0 or bench_index >= len(self.bench):
+            return False
+
+        retreat_cost = self.active.retreat_cost
+        if len(self.active.energy_attached) < retreat_cost:
+            return False
+
+        for _ in range(retreat_cost):
+            self.active.energy_attached.pop()
+
+        old_active = self.active
+        new_active = self.bench.pop(bench_index)
+
+        self.bench.append(old_active)
+        self.active = new_active
+
+        return True

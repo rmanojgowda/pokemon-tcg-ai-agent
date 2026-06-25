@@ -121,3 +121,44 @@ print("\nOpponent's active after KO:", game2.opponent_board.active)
 print("Opponent's discard pile:", [p.name for p in game2.opponent_board.discard_pile])
 print("Player prizes remaining (after KO):", game2.player_board.prizes_remaining)
 print("Opponent prizes remaining (unchanged):", game2.opponent_board.prizes_remaining)
+
+# ============================================
+# RETREAT TESTS
+# ============================================
+print("\n\n=== RETREAT TESTS ===")
+
+retreat_board = Board()
+
+active_pikachu = Pokemon("Pikachu", 60, "Lightning", "Fighting", [thunder_shock], 1)
+bench_squirtle = Pokemon("Squirtle", 50, "Water", "Lightning", [tackle], 1)
+bench_bulbasaur = Pokemon("Bulbasaur", 50, "Grass", "Fire", [tackle], 1)
+
+retreat_board.set_active(active_pikachu)
+retreat_board.add_to_bench(bench_squirtle)
+retreat_board.add_to_bench(bench_bulbasaur)
+
+print("Active before retreat:", retreat_board.active.name)
+print("Bench before retreat:", [p.name for p in retreat_board.bench])
+
+# Test 1: Try retreat with NOT enough energy (Pikachu has 0 energy, needs 1)
+print("\n--- Test 1: Retreat without enough energy ---")
+result1 = retreat_board.retreat(0)
+print("Retreat successful?", result1)
+print("Active (should be unchanged):", retreat_board.active.name)
+print("Bench (should be unchanged):", [p.name for p in retreat_board.bench])
+
+# Test 2: Attach energy, then retreat successfully
+print("\n--- Test 2: Retreat with enough energy ---")
+active_pikachu.attach_energy("Lightning")
+print("Pikachu energy attached:", active_pikachu.energy_attached)
+
+result2 = retreat_board.retreat(0)
+print("Retreat successful?", result2)
+print("Active after retreat:", retreat_board.active.name)
+print("Bench after retreat:", [p.name for p in retreat_board.bench])
+print("Pikachu energy after retreat (should be empty):", active_pikachu.energy_attached)
+
+# Test 3: Try retreat with invalid bench index
+print("\n--- Test 3: Retreat with invalid bench index ---")
+result3 = retreat_board.retreat(10)
+print("Retreat successful? (should be False)", result3)
