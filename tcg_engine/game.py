@@ -18,3 +18,14 @@ class Game:
     def start_new_turn(self):
         self.turn_number += 1
         self.energy_attached_to_this_turn = False
+
+    def execute_attack(self, attacker, attack, defender):
+        if not attack.can_use(attacker.energy_attached):
+            return False
+
+        damage = attack.damage
+        if defender.weakness == attacker.ptype:
+            damage = damage * 2
+
+        defender.damage_taken += damage
+        return True
