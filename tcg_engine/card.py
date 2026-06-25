@@ -18,6 +18,10 @@ class Pokemon:
     
     def attach_energy(self, energy_type):
         self.energy_attached.append(energy_type)
+
+    def evolve_into(self, new_form):
+        new_form.energy_attached = self.energy_attached
+        return new_form
     
 class Attack:
     def __init__(self, name, damage, energy_cost):

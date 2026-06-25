@@ -162,3 +162,29 @@ print("Pikachu energy after retreat (should be empty):", active_pikachu.energy_a
 print("\n--- Test 3: Retreat with invalid bench index ---")
 result3 = retreat_board.retreat(10)
 print("Retreat successful? (should be False)", result3)
+
+# ============================================
+# EVOLUTION TESTS
+# ============================================
+print("\n\n=== EVOLUTION TESTS ===")
+
+ember = Attack("Ember", 30, ["Fire"])
+flamethrower = Attack("Flamethrower", 80, ["Fire", "Fire", "Colorless"])
+
+charmander = Pokemon("Charmander", 70, "Fire", "Water", [ember], 1)
+charmander.attach_energy("Fire")
+charmander.damage_taken = 20
+
+print("Before evolution:")
+print("Name:", charmander.name)
+print("Current HP:", charmander.current_hp())
+print("Energy attached:", charmander.energy_attached)
+
+charmeleon = Pokemon("Charmeleon", 110, "Fire", "Water", [flamethrower], 2)
+evolved = charmander.evolve_into(charmeleon)
+
+print("\nAfter evolution:")
+print("Name:", evolved.name)
+print("Current HP:", evolved.current_hp())
+print("Energy attached:", evolved.energy_attached)
+print("Damage taken:", evolved.damage_taken)
