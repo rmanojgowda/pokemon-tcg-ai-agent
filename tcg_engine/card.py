@@ -16,6 +16,9 @@ class Pokemon:
     def is_knocked_out(self):
         return self.current_hp() <= 0
     
+    def attach_energy(self, energy_type):
+        self.energy_attached.append(energy_type)
+    
 class Attack:
     def __init__(self, name, damage, energy_cost):
         self.name = name
