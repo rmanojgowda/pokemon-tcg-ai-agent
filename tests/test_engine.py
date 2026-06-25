@@ -77,38 +77,47 @@ print("Pikachu energy:", pikachu.energy_attached)
 print("\nCan use Thunder Shock now?", thunder_shock.can_use(pikachu.energy_attached))
 
 # ============================================
-# ATTACK EXECUTION TESTS - Damage + Weakness
+# ATTACK EXECUTION TESTS - Damage + Weakness + Prizes
 # ============================================
 print("\n\n=== ATTACK EXECUTION TESTS ===")
 
-# Reset a fresh game for clean testing
 game2 = Game()
 
-# Create fresh Pokemon for this test (avoid reusing damaged pikachu)
 geodude = Pokemon("Geodude", 60, "Fighting", "Water", [tackle], 1)
 fresh_pikachu = Pokemon("Pikachu", 60, "Lightning", "Fighting", [thunder_shock], 1)
 fresh_squirtle = Pokemon("Squirtle", 50, "Water", "Lightning", [tackle], 1)
 
+# Set up boards properly
+game2.player_board.set_active(fresh_squirtle)
+game2.opponent_board.set_active(geodude)
+
+print("Player prizes remaining (start):", game2.player_board.prizes_remaining)
+print("Opponent prizes remaining (start):", game2.opponent_board.prizes_remaining)
+
 # Test 1: Not enough energy - should fail
 print("\n--- Test 1: Attack with insufficient energy ---")
-fresh_pikachu.attach_energy("Lightning")  # only 1, needs 2
-result = game2.execute_attack(fresh_pikachu, thunder_shock, geodude)
+fresh_pikachu.attach_energy("Lightning")
+result = game2.execute_attack(fresh_pikachu, thunder_shock, geodude, game2.opponent_board, game2.player_board)
 print("Attack succeeded?", result)
 print("Geodude damage taken:", geodude.damage_taken)
 
-# Test 2: Enough energy, no weakness match - normal damage
+# Test 2: Enough energy, no weakness - normal damage
 print("\n--- Test 2: Attack with enough energy, no weakness ---")
-fresh_pikachu.attach_energy("Lightning")  # now has 2
-result = game2.execute_attack(fresh_pikachu, thunder_shock, geodude)
+fresh_pikachu.attach_energy("Lightning")
+result = game2.execute_attack(fresh_pikachu, thunder_shock, geodude, game2.opponent_board, game2.player_board)
 print("Attack succeeded?", result)
 print("Geodude damage taken:", geodude.damage_taken)
 print("Geodude current HP:", geodude.current_hp())
 
-# Test 3: Weakness match - double damage
-print("\n--- Test 3: Attack that triggers weakness (double damage) ---")
-fresh_squirtle.attach_energy("Colorless")  # tackle costs 1 Colorless
-result = game2.execute_attack(fresh_squirtle, tackle, geodude)
+# Test 3: Weakness match - double damage, should KO and award prize
+print("\n--- Test 3: Attack that triggers weakness and KO ---")
+fresh_squirtle.attach_energy("Colorless")
+result = game2.execute_attack(fresh_squirtle, tackle, geodude, game2.opponent_board, game2.player_board)
 print("Attack succeeded?", result)
 print("Geodude damage taken:", geodude.damage_taken)
-print("Geodude current HP:", geodude.current_hp())
 print("Is Geodude knocked out?", geodude.is_knocked_out())
+
+print("\nOpponent's active after KO:", game2.opponent_board.active)
+print("Opponent's discard pile:", [p.name for p in game2.opponent_board.discard_pile])
+print("Player prizes remaining (after KO):", game2.player_board.prizes_remaining)
+print("Opponent prizes remaining (unchanged):", game2.opponent_board.prizes_remaining)

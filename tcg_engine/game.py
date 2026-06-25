@@ -19,7 +19,7 @@ class Game:
         self.turn_number += 1
         self.energy_attached_to_this_turn = False
 
-    def execute_attack(self, attacker, attack, defender):
+    def execute_attack(self, attacker, attack, defender, defender_board, attacker_board):
         if not attack.can_use(attacker.energy_attached):
             return False
 
@@ -28,4 +28,9 @@ class Game:
             damage = damage * 2
 
         defender.damage_taken += damage
+
+        if defender.is_knocked_out():
+            defender_board.knock_out_active()
+            attacker_board.prizes_remaining -= 1
+
         return True
