@@ -188,3 +188,17 @@ print("Name:", evolved.name)
 print("Current HP:", evolved.current_hp())
 print("Energy attached:", evolved.energy_attached)
 print("Damage taken:", evolved.damage_taken)
+
+# ============================================
+# FULL BATTLE SIMULATION TEST
+# ============================================
+print("\n\n=== FULL BATTLE SIMULATION ===")
+
+attacker_pikachu = Pokemon("Pikachu", 60, "Lightning", "Fighting", [thunder_shock], 1)
+defender_geodude = Pokemon("Geodude", 60, "Fighting", "Water", [tackle], 1)
+
+battle_game = Game()
+battle_game.player_board.set_active(attacker_pikachu)
+battle_game.opponent_board.set_active(defender_geodude)
+
+battle_game.simulate_simple_battle(max_turns=20)

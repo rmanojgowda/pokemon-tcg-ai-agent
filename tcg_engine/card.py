@@ -30,8 +30,21 @@ class Attack:
         self.energy_cost = energy_cost
     
     def can_use(self, energy_attached):
+        available = energy_attached.copy()
         cost_copy = self.energy_cost.copy()
-        for energy in energy_attached:
-            if energy in cost_copy:
-                cost_copy.remove(energy)
-        return len(cost_copy) == 0
+
+        # First pass: match specific (non-Colorless) costs exactly
+        specific_costs = [c for c in cost_copy if c != "Colorless"]
+        for cost in specific_costs:
+            if cost in available:
+                available.remove(cost)
+                cost_copy.remove(cost)
+            else:
+                return False
+
+        # Second pass: remaining cost must all be Colorless, pay with ANY leftover energy
+        colorless_needed = cost_copy.count("Colorless")
+        if len(available) < colorless_needed:
+            return False
+
+        return True
